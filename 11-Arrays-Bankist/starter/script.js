@@ -86,9 +86,10 @@ const displayMovements = function (movements) {
 };
 // displayMovements(account1.movements);
 
-const calcDisplayBalance = function (movements) {
-  const balance = movements.reduce((acc, mov) => acc + mov, 0);
-  labelBalance.textContent = `${balance} EUR`;
+const calcDisplayBalance = function (acc) {
+  acc.balance = acc.movements.reduce((acc, mov) => acc + mov, 0);
+
+  labelBalance.textContent = `${acc.balance} EUR`;
 };
 // calcDisplayBalance(account1.movements);
 
@@ -128,6 +129,15 @@ createUsernames(accounts); // stw
 // console.log(createUsernames('Steven Thomas Williams')); // stw
 // console.log(accounts);
 
+const updateUI = function (acc) {
+  // Display movements
+  displayMovements(acc.movements);
+  // Display balance
+  calcDisplayBalance(acc);
+  // Display summary
+  calcDisplaySummary(acc);
+};
+
 // IMPLEMENTING LOGIN : Event handler
 let currentAccount;
 btnLogin.addEventListener('click', function (e) {
@@ -147,12 +157,37 @@ btnLogin.addEventListener('click', function (e) {
     containerApp.style.opacity = 100;
     // Clear input fields
     inputLoginUsername.value = inputLoginPin.value = '';
-    // Display movements
-    displayMovements(currentAccount.movements);
-    // Display balance
-    calcDisplayBalance(currentAccount.movements);
-    // Display summary
-    calcDisplaySummary(currentAccount);
+    inputLoginPin.blur();
+
+    // Update UI
+    updateUI(currentAccount);
+  }
+});
+
+// IMPLEMENTING TRANSFER
+btnTransfer.addEventListener('click', function (e) {
+  e.preventDefault(); // to prevent page reload when clicking a button
+  const amount = Number(inputTransferAmount.value);
+  const receiverAcc = accounts.find(
+    acc => acc.username === inputTransferTo.value
+  );
+  // console.log(amount, receiverAcc);
+  inputTransferAmount.value = inputTransferTo.value = '';
+
+  if (
+    amount > 0 &&
+    receiverAcc &&
+    currentAccount.balance >= amount &&
+    receiverAcc?.username !== currentAccount.username
+  ) {
+    // Check if all conditions are true "Transfer valid" will execute
+    // console.log('Transfer valid');
+    // Doing the transfer
+    currentAccount.movements.push(-amount);
+    receiverAcc.movements.push(amount);
+
+    // Update UI
+    updateUI(currentAccount);
   }
 });
 /* PROJECT: BANKIST APP */
