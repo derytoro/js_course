@@ -191,6 +191,23 @@ btnTransfer.addEventListener('click', function (e) {
   }
 });
 
+/* Some and every method: Implementing on Loan Feature of Bankist */
+btnLoan.addEventListener('click', function (e) {
+  e.preventDefault();
+
+  const amount = Number(inputLoanAmount.value);
+
+  if (amount > 0 && currentAccount.movements.some(mov => mov >= amount * 0.1)) {
+    // Add movement
+    currentAccount.movements.push(amount);
+
+    // Update UI
+    updateUI(currentAccount);
+  }
+  inputLoanAmount.value = '';
+});
+/* Some and every method: Implementing on Loan Feature of Bankist */
+
 /* FindIndex Method: Implementing on Close Account button */
 btnClose.addEventListener('click', function (e) {
   e.preventDefault();
@@ -214,7 +231,54 @@ btnClose.addEventListener('click', function (e) {
 
   inputCloseUsername.value = inputClosePin.value = '';
 });
+/* FindIndex Method: Implementing on Close Account button */
 /* PROJECT: BANKIST APP */
+
+/* SOME AND EVERY */
+console.log('==== Some and every ====');
+console.log(movements);
+
+// EQUALITY
+console.log(movements.includes(-130));
+
+// CONDITION
+console.log(movements.some(mov => mov === -130));
+
+const anyDeposits = movements.some(mov => mov > 1500);
+console.log(anyDeposits);
+
+// EVERY
+console.log(movements.every(mov => mov > 0)); // false
+console.log(account4.movements.every(mov => mov > 0)); // true, because all account4's movement are positive value
+
+// Separate callback: You can write like this one
+const positiveDeposit = mov => mov > 0;
+const negativeDeposit = mov => mov < 0;
+console.log(movements.some(positiveDeposit));
+console.log(movements.every(positiveDeposit));
+console.log(movements.filter(positiveDeposit));
+console.log(movements.filter(negativeDeposit));
+
+/* SOME AND EVERY */
+
+/* flat and flatMap Method */
+const arr1 = [
+  [1, 2, 3],
+  [4, 5, 6],
+  [7, 8],
+];
+console.log(arr1.flat());
+
+const arrDeep = [
+  [[1, 2], 3],
+  [4, [5, 6]],
+  [7, 8],
+];
+console.log(arrDeep.flat(2)); // 2 is a deep level of nested array
+
+const accountMovements = accounts.map(acc => acc.movements);
+console.log(accountMovements);
+/* flat and flatMap Method */
 
 /* DATA TRANSFORMATION: MAP, FILTER, REDUCE */
 /* =========== MAP METHOD ============== */
