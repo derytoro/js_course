@@ -81,8 +81,67 @@ header.append(message);
 //   });
 
 // Deleted message by removing child elemnt of the parent elemnt
+// document
+//   .querySelector('.btn--close--cookie')
+//   .addEventListener('click', function () {
+//     message.parentElement.removeChild(message);
+//   });
+
+// Styles, Attributes and Classes
 document
   .querySelector('.btn--close--cookie')
   .addEventListener('click', function () {
     message.parentElement.removeChild(message);
   });
+
+// Styles
+message.style.backgroundColor = '#37383d';
+message.style.width = '120%';
+
+// Defining inline style into DOM
+console.log(message.style.height); // returns empty
+console.log(message.style.backgroundColor); // rgb(55,56,61)
+
+console.log(getComputedStyle(message));
+console.log(getComputedStyle(message).color);
+console.log(getComputedStyle(message).height);
+
+message.style.height =
+  Number.parseFloat(getComputedStyle(message).height, 10) + 30 + 'px';
+
+// Change color of :root in style.css
+// :root css is equal to document.documentElement in javascript
+document.documentElement.style.setProperty('--color-primary', 'orangered');
+
+// Attributes
+const logo = document.querySelector('.nav__logo');
+console.log(logo.alt);
+console.log(logo.src);
+console.log(logo.className);
+
+logo.alt = 'Beautiful minimalist logo';
+
+// Non-standard
+console.log(logo.designer); // undefined
+console.log(logo.getAttribute('designer')); // Jonas
+logo.setAttribute('company', 'Bankist');
+
+console.log(logo.src);
+console.log(logo.getAttribute('src'));
+
+// const link = document.querySelector('.twitter-link');
+const link = document.querySelector('.nav__link--btn'); // returns #
+console.log(link.href);
+console.log(link.getAttribute('href'));
+
+// Data attributes
+console.log(logo.dataset.versionNumber); // 3.0
+
+// Classes
+logo.classList.add('c', 'j');
+logo.classList.remove('c', 'j');
+logo.classList.toggle('c');
+logo.classList.contains('c'); // not includes in array
+
+// Don't use because it will override the existing classes ans only put one class in any element
+logo.className = 'Jonas';
