@@ -37,7 +37,7 @@ Behavior is delegated to the linked prototype object.
    The easiest and most straightforward way of linking an object to a prototype object.
 */
 
-// Constructor fuctions and the new operator
+// Creates class by using Constructor fuctions and the new operator
 const Person = function (firstName, birthYear) {
   //console.log(this);
   this.firstName = firstName;
@@ -49,31 +49,67 @@ const Person = function (firstName, birthYear) {
   //   };
 };
 
+// Creates new function calcAge(). it will be a part of Person prototype and it can invoke by instance
+Person.prototype.calcAge = function () {
+  console.log(2037 - this.birthYear);
+};
+
 const jonas = new Person('Jonas', 1991);
-console.log(jonas);
+const matilda = new Person('Matilda', 2017);
+// console.log(jonas,matilda);
+// instance of Person is available to call calcAge() which part of prototype
+// jonas.calcAge();
+// matilda.calcAge();
+// jack.calcAge();
+
+// Inheritance Student:child from Person:parent class by using constructor functions
+const Student = function (firstName, birthYear, course) {
+  // this.firstName = firstName;
+  // this.birthYear = birthYear;
+  Person.call(this, firstName, birthYear);
+  this.course = course;
+};
+
+// Inheritance between Classes: Constructor functions
+// Linking prototypes (Inheritance Student to Person class): So Student's instance 'mike' can invoke callAge() from Person class
+Student.prototype = Object.create(Person.prototype);
+
+Student.prototype.introduce = function () {
+  console.log(`My name is ${this.firstName} an I study ${this.course}`);
+};
+
+const mike = new Student('Mike', 2020, 'Computer Science');
+console.log(mike);
+mike.introduce();
+mike.calcAge();
+console.log(mike.__proto__);
+console.log(mike.__proto__.__proto__);
+
+console.log(mike instanceof Student); // true
+console.log(mike instanceof Person); // true, it's because we used Linking prototypes between Student and Person
+console.log(mike instanceof Object); // true
+
+Student.prototype.constructor = Student;
+console.dir(Student.prototype.constructor); // returns Student class, but if we don't declare "Student.prototype.constructor = Student" the return is Person class
 
 // 1. New {} is created
 // 2. function is called, this = {}
 // 3. {} linked to prototype
 // 4. function automatically return {}
 
-const matilda = new Person('Matilda', 2017);
-const jack = new Person('Jack', 2022);
-console.log(matilda, jack);
+// console.log(jonas instanceof Person); // true
 
-console.log(jonas instanceof Person); // true
+// Implementing static methods that only available for constructor Person not instance.
+Person.hey = function () {
+  console.log('Hey there 👋');
+  console.log(this);
+};
+Person.hey(); // Hey there 👋 this is a static method
+// it can't invoke hey(), because it's a static method
+// jonas.hey(); // jonas.hey is not a function
 
 // Prototypes
 console.log(Person.prototype);
-
-// Creates new function calcAge().
-Person.prototype.calcAge = function () {
-  console.log(2037 - this.birthYear);
-};
-
-jonas.calcAge();
-matilda.calcAge();
-jack.calcAge();
 
 console.log(jonas.__proto__);
 console.log(jonas.__proto__ === Person.prototype); // true
@@ -126,7 +162,7 @@ DATA CAR 2: 'Mercedes' going at 95 km/h
 
 GOOD LUCK 😀
 */
-
+/*
 const Car = function (make, speed) {
   this.make = make;
   this.speed = speed;
@@ -151,12 +187,16 @@ bwm.accelerate();
 const mercedes = new Car('Mercedes', 95);
 mercedes.accelerate();
 mercedes.brake();
+*/
+
+// Coding Challenge #1
 
 // ES6 Classes
 // class expression
 // const PersonCl = class {};
 
 // class declaration
+/*
 class PersonCl {
   constructor(fullName, birthYear) {
     this.fullName = fullName;
@@ -184,26 +224,32 @@ class PersonCl {
   get fullName() {
     return this._fullName;
   }
+
+  static hey() {
+    console.log('Hey there 👋');
+    console.log(this);
+  }
 }
+*/
+// const jessica = new PersonCl('Jessica Davis', 1996);
+// console.log(jessica);
+// jessica.calcAge();
+// console.log(jessica.age);
 
-const jessica = new PersonCl('Jessica Davis', 1996);
-console.log(jessica);
-jessica.calcAge();
-console.log(jessica.age);
-
-console.log(jessica.__proto__ === PersonCl.prototype);
+// console.log(jessica.__proto__ === PersonCl.prototype);
 
 // Creates new function greet() into PersonCl class
-PersonCl.prototype.greet = function () {
-  console.log(`Hey ${this.fullName}`);
-};
-jessica.greet();
+// PersonCl.prototype.greet = function () {
+//   console.log(`Hey ${this.fullName}`);
+// };
+// jessica.greet();
 
 // 1. Classes are NOT hoisted
 // 2. Class are first-class citizen
 // 3. Classes are executed in strict mode
 
-const walter = new PersonCl('Walter', 1965); // walter probably has not a fullName property, then alert appears
+// const walter = new PersonCl('Walter', 1965); // walter probably has not a fullName property, then alert appears
+// PersonCl.hey();
 
 // SETTERS and GETTERS
 // it is useful for data validation
@@ -226,3 +272,82 @@ console.log(account.latest);
 // how to use setters
 account.latest = 50;
 console.log(account.movements);
+
+// STATIC METHODS: function that only available for constructor
+// Array.from(document.querySelectorAll('h1'));
+// Number.parseFloat(12);
+
+// Object.create: creating prototype manually called "PersonProto"
+const PersonProto = {
+  calcAge() {
+    console.log(2037 - this.birthYear);
+  },
+
+  // you can change init() with any name
+  init(firstName, birthYear) {
+    this.firstName = firstName;
+    this.birthYear = birthYear;
+  },
+};
+
+const steven = Object.create(PersonProto);
+console.log(steven); // will create empty object {} that linked to PersonProto
+// create steven properties by linked to PersonProto by using object literal
+steven.name = 'Steven';
+steven.birthYear = 2002;
+steven.calcAge(); //35
+
+console.log(steven.__proto__ === PersonProto); // true
+
+const sarah = Object.create(PersonProto);
+sarah.init('Sarah', 1979);
+sarah.calcAge();
+
+///////////////////////////////////////
+// Coding Challenge #2
+
+/* 
+1. Re-create challenge 1, but this time using an ES6 class;
+2. Add a getter called 'speedUS' which returns the current speed in mi/h (divide by 1.6);
+3. Add a setter called 'speedUS' which sets the current speed in mi/h (but converts it to km/h before storing the value, by multiplying the input by 1.6);
+4. Create a new car and experiment with the accelerate and brake methods, and with the getter and setter.
+
+DATA CAR 1: 'Ford' going at 120 km/h
+
+GOOD LUCK 😀
+*/
+
+class CarCl {
+  constructor(make, speed) {
+    this.make = make;
+    this.speed = speed;
+  }
+
+  accelerate() {
+    this.speed += 10;
+    console.log(`${this.make} is going at ${this.speed} km/h`);
+  }
+
+  brake() {
+    this.speed -= 5;
+    console.log(`${this.make} is going at ${this.speed} km/h`);
+  }
+
+  get speedUS() {
+    return this.speed / 1.6;
+  }
+
+  set speedUS(speed) {
+    this.speed = speed * 1.6;
+  }
+}
+
+const ford = new CarCl('Ford', 120);
+console.log(ford); // instance
+console.log(ford.speedUS); // getters
+ford.accelerate();
+ford.accelerate();
+ford.brake();
+
+ford.speedUS = 50; // setters
+console.log(ford); // 50 * 1.6 = 80
