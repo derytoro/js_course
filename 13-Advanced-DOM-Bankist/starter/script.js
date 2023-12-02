@@ -18,8 +18,10 @@ const closeModal = function () {
   overlay.classList.add('hidden');
 };
 
-for (let i = 0; i < btnsOpenModal.length; i++)
-  btnsOpenModal[i].addEventListener('click', openModal);
+// for (let i = 0; i < btnsOpenModal.length; i++)
+//   btnsOpenModal[i].addEventListener('click', openModal);
+
+btnsOpenModal.forEach(btn => btn.addEventListener('click', openModal));
 
 btnCloseModal.addEventListener('click', closeModal);
 overlay.addEventListener('click', closeModal);
@@ -30,6 +32,40 @@ document.addEventListener('keydown', function (e) {
   }
 });
 
+///////////////////////
+// Page navigation: Smooth scrool
+// document.querySelectorAll('.nav__link').forEach(function (el) {
+//   el.addEventListener('click', function (e) {
+//     e.preventDefault();
+//     // console.log('LINK');
+//     const id = this.getAttribute('href');
+//     console.log(id);
+//     document.querySelector(id).scrollIntoView({
+//       behavior: 'smooth',
+//     });
+//   });
+// });
+
+/* Event delegation 
+1. Add event listener to common parent element
+2. Determine what element originated the event
+*/
+document.querySelector('.nav__links').addEventListener('click', function (e) {
+  console.log(e.target);
+
+  // Matching strategy
+  if(e.target.classList.contains('nav__link')) {
+    // console.log('LINK')
+    e.preventDefault();
+    const id = e.target.getAttribute('href');
+    // console.log(id);
+    document.querySelector(id).scrollIntoView({
+      behavior: 'smooth',
+    });
+  }
+});
+
+//////////////////////
 /*
 Advanced DOM and events
 */
@@ -146,6 +182,7 @@ logo.classList.contains('c'); // not includes in array
 // Don't use because it will override the existing classes ans only put one class in any element
 logo.className = 'Jonas';
 
+//////////////////////////////////////
 // Implementing smooth scrolling
 // const btnScrollTo = document.querySelector('.btn--scroll');
 // const section1 = document.querySelector('#section--1');
@@ -180,19 +217,18 @@ logo.className = 'Jonas';
 //   section1.scrollIntoView({ behavior: 'smooth' });
 // });
 
-
 // Types of Events and Event Handlers
-const h1 = document.querySelector('h1');
+// const h1 = document.querySelector('h1');
 
-const alertH1 = function (e) {
-  alert('addEventListener: Great! You are reading the heading');
+// const alertH1 = function (e) {
+//   alert('addEventListener: Great! You are reading the heading');
 
-  // h1.removeEventListener('mouseenter', alertH1); // it removes alert from alertH1(), so alert will appear at once
-};
+//   // h1.removeEventListener('mouseenter', alertH1); // it removes alert from alertH1(), so alert will appear at once
+// };
 
-h1.addEventListener('mouseenter', alertH1);
+// h1.addEventListener('mouseenter', alertH1);
 
-setTimeout(() => h1.removeEventListener('mouseenter', alertH1), 3000);
+// setTimeout(() => h1.removeEventListener('mouseenter', alertH1), 3000);
 
 // h1.addEventListener('mouseenter', function (e) {
 //   alert('addEventListener: Great! You are reading the heading');
@@ -201,3 +237,36 @@ setTimeout(() => h1.removeEventListener('mouseenter', alertH1), 3000);
 // h1.onmouseenter = function (e) {
 //   alert('addEventListener: Great! You are reading the heading');
 // };
+
+///////////////////////////////////////
+// Event Propagation in Practice
+// const randomInt = (min, max) =>
+//   Math.floor(Math.random() * (max - min + 1) + min);
+
+// const randomColor = () =>
+//   `rgb(${randomInt(0, 255)}, ${randomInt(0, 255)},${randomInt(0, 255)})`;
+
+// console.log(randomColor(0, 255));
+
+// document.querySelector('.nav__link').addEventListener('click', function (e) {
+//   this.style.backgroundColor = randomColor();
+//   console.log('LINK', e.target, e.currentTarget);
+//   console.log(e.currentTarget === this);
+
+// Stop propagtion
+// e.stopPropagation();
+// });
+
+// document.querySelector('.nav__links').addEventListener('click', function (e) {
+//   this.style.backgroundColor = randomColor();
+//   console.log('CONTAINER', e.target, e.currentTarget);
+// });
+
+// document.querySelector('.nav').addEventListener(
+//   'click',
+//   function (e) {
+//     this.style.backgroundColor = randomColor();
+//     console.log('NAV', e.target, e.currentTarget);
+//   },
+//   true // capturing, appears at the first log
+// );
