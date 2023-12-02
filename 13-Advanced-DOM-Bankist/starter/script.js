@@ -53,8 +53,8 @@ console.log(document.getElementsByClassName('btn')); // will returns HTMLCollect
 
 // Creating and Inserting Elements
 // .insertAdjacentHTML
-const message = document.createElement('div');
-message.classList.add('cookie-message');
+const message = document.createElement('div'); // return DOM element div
+message.classList.add('cookie-message'); // adding class name on div "message"
 // message.textContent = 'We use cookied for improved functionality and analytics.';
 message.innerHTML =
   'We use cookied for improved functionality and analytics. <button class="btn btn--close--cookie">Got It!</button>';
@@ -67,20 +67,20 @@ header.append(message);
 // appending basically adds the element as the last child of this element
 // so message is now indeed a life element living in the DOM, and so therefor it cannot be at multiple places at the same time. it's just like a person that also cannot be at two places simultaneously.
 
-// Copying the message twice into the header
+// Copying the message twice into the header, it will create 2 message at first and last child
 // header.append(message.cloneNode(true));
 
 // header.before(message); // adds message as a sibling before the header, not included within the header
 // header.after(message); // adds message as a sibling after the header, not included within the header
 
-// Deleted elements
+// Delete elements
 // document
 //   .querySelector('.btn--close--cookie')
 //   .addEventListener('click', function () {
 //     message.remove();
 //   });
 
-// Deleted message by removing child elemnt of the parent elemnt
+// Delete message by removing child elemnt of the parent elemnt
 // document
 //   .querySelector('.btn--close--cookie')
 //   .addEventListener('click', function () {
@@ -100,10 +100,10 @@ message.style.width = '120%';
 
 // Defining inline style into DOM
 console.log(message.style.height); // returns empty
-console.log(message.style.backgroundColor); // rgb(55,56,61)
+console.log(message.style.backgroundColor); // rgb(55,56,61) only work on inline style
 
-console.log(getComputedStyle(message));
-console.log(getComputedStyle(message).color);
+console.log(getComputedStyle(message)); // will get value from css file or our real style of web page
+console.log(getComputedStyle(message).color); // returns string
 console.log(getComputedStyle(message).height);
 
 message.style.height =
@@ -126,22 +126,78 @@ console.log(logo.designer); // undefined
 console.log(logo.getAttribute('designer')); // Jonas
 logo.setAttribute('company', 'Bankist');
 
-console.log(logo.src);
-console.log(logo.getAttribute('src'));
+console.log(logo.src); // absolute url
+console.log(logo.getAttribute('src')); // relative url
 
 // const link = document.querySelector('.twitter-link');
-const link = document.querySelector('.nav__link--btn'); // returns #
-console.log(link.href);
-console.log(link.getAttribute('href'));
+const link = document.querySelector('.nav__link--btn');
+console.log(link.href); // returns absolute url
+console.log(link.getAttribute('href')); // returns # relative url
 
 // Data attributes
 console.log(logo.dataset.versionNumber); // 3.0
 
 // Classes
-logo.classList.add('c', 'j');
+logo.classList.add('c', 'j'); // add multiple classes
 logo.classList.remove('c', 'j');
 logo.classList.toggle('c');
 logo.classList.contains('c'); // not includes in array
 
 // Don't use because it will override the existing classes ans only put one class in any element
 logo.className = 'Jonas';
+
+// Implementing smooth scrolling
+// const btnScrollTo = document.querySelector('.btn--scroll');
+// const section1 = document.querySelector('#section--1');
+
+// btnScrollTo.addEventListener('click', function (e) {
+//   const s1coords = section1.getBoundingClientRect();
+//   console.log(s1coords);
+
+//   console.log(e.target.getBoundingClientRect());
+
+//   console.log('Current scroll (X/Y)', window.pageXOffset, pageYOffset);
+
+//   console.log(
+//     'height/width viewport',
+//     document.documentElement.clientHeight,
+//     document.documentElement.clientWidth
+//   );
+
+// Scrolling
+// window.scrollTo(
+//   s1coords.left + window.pageXOffset,
+//   s1coords.top + window.pageYOffset,
+// );
+
+// window.scrollTo({
+//   left: s1coords.left + window.pageXOffset,
+//   top: s1coords.top + window.pageYOffset,
+//   behavior: 'smooth',
+// });
+
+// Modern way
+//   section1.scrollIntoView({ behavior: 'smooth' });
+// });
+
+
+// Types of Events and Event Handlers
+const h1 = document.querySelector('h1');
+
+const alertH1 = function (e) {
+  alert('addEventListener: Great! You are reading the heading');
+
+  // h1.removeEventListener('mouseenter', alertH1); // it removes alert from alertH1(), so alert will appear at once
+};
+
+h1.addEventListener('mouseenter', alertH1);
+
+setTimeout(() => h1.removeEventListener('mouseenter', alertH1), 3000);
+
+// h1.addEventListener('mouseenter', function (e) {
+//   alert('addEventListener: Great! You are reading the heading');
+// });
+
+// h1.onmouseenter = function (e) {
+//   alert('addEventListener: Great! You are reading the heading');
+// };
